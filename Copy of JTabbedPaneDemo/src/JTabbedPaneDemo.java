@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
+import twitter4j.TwitterException;
+
 import com.temboo.core.TembooException;
 
 import java.awt.*;
@@ -16,7 +18,7 @@ import java.net.URISyntaxException;
 public class JTabbedPaneDemo extends JPanel {
 
 	JTextArea textArea;
-	public JTabbedPaneDemo() throws TembooException, IOException, URISyntaxException {
+	public JTabbedPaneDemo() throws TembooException, IOException, URISyntaxException, TwitterException {
 		ImageIcon icon = new ImageIcon("java-swing-tutorial.JPG");
 		JTabbedPane jtbExample = new JTabbedPane();
 		
@@ -25,7 +27,7 @@ public class JTabbedPaneDemo extends JPanel {
 		jtbExample.setSelectedIndex(0);
 		JPanel p = new JPanel();
 		
-	    JPanel jplInnerPanel2 = createInnerPanel("Twitter");
+	    JPanel jplInnerPanel2 = createInnerPanel(new Tweet1().check());
 		jtbExample.addTab("Twitter", icon, jplInnerPanel2);
 		
 		JPanel jplInnerPanel3 = createInnerPanel(new NYTRunner1().refresh());
@@ -56,7 +58,7 @@ public class JTabbedPaneDemo extends JPanel {
 		return jplPanel;
 	}
 
-	public static void main(String[] args) throws TembooException, IOException, URISyntaxException {
+	public static void main(String[] args) throws TembooException, IOException, URISyntaxException, TwitterException {
 		JFrame frame = new JFrame("TabbedPane Source Demo");
 		frame.addWindowListener(new WindowAdapter() {
 

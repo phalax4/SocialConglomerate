@@ -1,4 +1,4 @@
-package Twitter.src.Access;
+
 
 
 //Original code at http://www.java-tutorial.ch/framework/twitter-with-java-tutorial
@@ -40,9 +40,9 @@ import com.temboo.core.TembooSession;
 
 
 
-public class Tweet {
+public class Tweet1 {
 	
-	public Tweet()throws TembooException{
+	public Tweet1()throws TembooException{
 	}
 	Properties prop;
 
@@ -180,7 +180,7 @@ public class Tweet {
     		var4 = au.indexOf(",",var3)-1;
     	
     		
-    		thread += screen_name + " said " + text+" with "+au.substring(var3,var4) +"\n\n";
+    		thread += screen_name + "\n" + text+"\n"+au.substring(var3,var4) +"\n\n";
     	}
 		//new Reader().parse(result);
 
