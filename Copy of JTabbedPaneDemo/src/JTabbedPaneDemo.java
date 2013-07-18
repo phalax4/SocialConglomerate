@@ -6,17 +6,19 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
+import com.temboo.core.TembooException;
+
 import java.awt.*;
 import java.awt.event.*;
 
 public class JTabbedPaneDemo extends JPanel {
 
 	JTextArea textArea;
-	public JTabbedPaneDemo() {
+	public JTabbedPaneDemo() throws TembooException {
 		ImageIcon icon = new ImageIcon("java-swing-tutorial.JPG");
 		JTabbedPane jtbExample = new JTabbedPane();
 		
-		JPanel jplInnerPanel1 = createInnerPanel(new Tweet().check());
+		JPanel jplInnerPanel1 = createInnerPanel(new AutoLogTest1().refresh());
 		jtbExample.addTab("Facebook", icon, jplInnerPanel1, "Tab 1");
 		jtbExample.setSelectedIndex(0);
 		JPanel p = new JPanel();
@@ -52,7 +54,7 @@ public class JTabbedPaneDemo extends JPanel {
 		return jplPanel;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws TembooException {
 		JFrame frame = new JFrame("TabbedPane Source Demo");
 		frame.addWindowListener(new WindowAdapter() {
 

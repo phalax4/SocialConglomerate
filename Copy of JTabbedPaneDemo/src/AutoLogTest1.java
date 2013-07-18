@@ -1,4 +1,3 @@
-package facebookStuff.src;
 
 import java.util.Scanner;
 
@@ -18,13 +17,13 @@ import com.temboo.Library.Facebook.Reading.NewsFeed.NewsFeedResultSet;
 import com.temboo.core.TembooException;
 import com.temboo.core.TembooSession;
 
-public class AutoLogTest {
+public class AutoLogTest1 {
 	
 	private TembooSession session;
 	private FinalizeOAuthResultSet finalizeOAuthResults;
 	private String fbAccessToken;
 	
-	public AutoLogTest() throws TembooException{
+	public AutoLogTest1() throws TembooException{
 		
 		String callbackID;
 		String fbAccessToken;
