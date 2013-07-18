@@ -15,17 +15,21 @@ import com.temboo.Library.Facebook.Reading.NewsFeed.NewsFeedInputSet;
 import com.temboo.Library.Facebook.Reading.NewsFeed.NewsFeedResultSet;
 import com.temboo.core.TembooException;
 import com.temboo.core.TembooSession;
-//import javax.swing.JOptionPane;
 
 public class AutoLogTest {
-	public static void main(String[] args) throws TembooException{
+	
+	private TembooSession session;
+	private FinalizeOAuthResultSet finalizeOAuthResults;
+	private String fbAccessToken;
+	
+	public AutoLogTest() throws TembooException{
 		
 		String callbackID;
 		String fbAccessToken;
 		Scanner in = new Scanner(System.in);
 		
 		// Instantiate the Choreo, using a previously instantiated TembooSession object, eg:
-		TembooSession session = new TembooSession("jayos", "myFirstApp", "d23787cb-8d8f-4c83-a");
+		session = new TembooSession("jayos", "myFirstApp", "d23787cb-8d8f-4c83-a");
 		InitializeOAuth initializeOAuthChoreo = new InitializeOAuth(session);
 		
 		// Get an InputSet object for the choreo
@@ -49,40 +53,50 @@ public class AutoLogTest {
 		finalizeOAuthInputs.set_CallbackID(callbackID);
 		finalizeOAuthInputs.set_AppSecret("7c874744ce5b9cfdf94fd330441ab8eb");
 		finalizeOAuthInputs.set_AppID("395494320570728");
-		FinalizeOAuthResultSet finalizeOAuthResults = finalizeOAuthChoreo.execute(finalizeOAuthInputs);
-			
-		NewsFeed newsFeedChoreo = new NewsFeed(session);
-		NewsFeedInputSet newsFeedInputs = newsFeedChoreo.newInputSet();
-		fbAccessToken = finalizeOAuthResults.get_AccessToken();
-		newsFeedInputs.set_AccessToken(fbAccessToken);
-		NewsFeedResultSet newsFeedResults = newsFeedChoreo.execute(newsFeedInputs);
-		String json = newsFeedResults.get_Response();
-		//System.out.println(json);
+		finalizeOAuthResults = finalizeOAuthChoreo.execute(finalizeOAuthInputs);
 		
-		// Parse the json with gson
-    	JsonParser jp = new JsonParser();
-    	JsonElement root = jp.parse(json);
-    	JsonObject rootobj = root.getAsJsonObject(); // may be Json Array if it's an array, or other type if a primitive
-    	
-    	JsonArray feed = rootobj.get("data").getAsJsonArray();
-    	
-    	for(int i = 0; i < feed.size(); i++) {
-    		String name = feed.get(i).getAsJsonObject().get("from").getAsJsonObject().get("name").getAsString();
-   			JsonElement msg = feed.get(i).getAsJsonObject().get("message");
-   			String message = "a custom post such as a video or picture";
-   			String pict = "";
-   			JsonElement pic = feed.get(i).getAsJsonObject().get("picture");
-   			if(msg != null) {
-   				message = msg.getAsString();
-   			}
-   			if(pic != null){
-   				pict = pic.getAsString();
-   				System.out.println(name + "\n" + message + "\n" + pict + "\n");
-   			}
-   			else{
-   				System.out.println(name + "\n" + message + "\n");
-   			}
-   			//JOptionPane.showMessageDialog(null, name + "\n" + message);
-    	}		
+				
+	}
+	
+	public String refresh() throws TembooException
+	{
+		String f = "";
+		
+		//receives raw feed	
+				NewsFeed newsFeedChoreo = new NewsFeed(session);
+				NewsFeedInputSet newsFeedInputs = newsFeedChoreo.newInputSet();
+				fbAccessToken = finalizeOAuthResults.get_AccessToken();
+				newsFeedInputs.set_AccessToken(fbAccessToken);
+				NewsFeedResultSet newsFeedResults = newsFeedChoreo.execute(newsFeedInputs);
+				String json = newsFeedResults.get_Response();
+				//System.out.println(json);
+				
+				// Parse the json with gson
+		    	JsonParser jp = new JsonParser();
+		    	JsonElement root = jp.parse(json);
+		    	JsonObject rootobj = root.getAsJsonObject(); // may be Json Array if it's an array, or other type if a primitive
+		    	
+		    	JsonArray feed = rootobj.get("data").getAsJsonArray();
+		    	
+		    	for(int i = 0; i < feed.size(); i++) {
+		    		String name = feed.get(i).getAsJsonObject().get("from").getAsJsonObject().get("name").getAsString();
+		   			JsonElement msg = feed.get(i).getAsJsonObject().get("message");
+		   			String message = "a custom post such as a video or picture";
+		   			String pict = "";
+		   			JsonElement pic = feed.get(i).getAsJsonObject().get("picture");
+		   			if(msg != null) {
+		   				message = msg.getAsString();
+		   			}
+		   			if(pic != null){
+		   				pict = pic.getAsString();
+		   				f += name + "\n" + message + "\n" + pict + "\n\n";
+		   			}
+		   			else{
+		   				f += name + "\n" + message + "\n\n";
+		   			}
+		   			//JOptionPane.showMessageDialog(null, name + "\n" + message);
+		    	}
+		
+		return f;
 	}
 }
