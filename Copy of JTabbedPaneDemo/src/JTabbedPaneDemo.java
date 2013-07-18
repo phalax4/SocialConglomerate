@@ -10,11 +10,13 @@ import com.temboo.core.TembooException;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class JTabbedPaneDemo extends JPanel {
 
 	JTextArea textArea;
-	public JTabbedPaneDemo() throws TembooException {
+	public JTabbedPaneDemo() throws TembooException, IOException, URISyntaxException {
 		ImageIcon icon = new ImageIcon("java-swing-tutorial.JPG");
 		JTabbedPane jtbExample = new JTabbedPane();
 		
@@ -26,7 +28,7 @@ public class JTabbedPaneDemo extends JPanel {
 	    JPanel jplInnerPanel2 = createInnerPanel("Twitter");
 		jtbExample.addTab("Twitter", icon, jplInnerPanel2);
 		
-		JPanel jplInnerPanel3 = createInnerPanel("News");
+		JPanel jplInnerPanel3 = createInnerPanel(new NYTRunner1().refresh());
 		jtbExample.addTab("News", icon, jplInnerPanel3, "Tab 3");
 		setLayout(new GridLayout(1, 1));
 		add(jtbExample);
@@ -54,7 +56,7 @@ public class JTabbedPaneDemo extends JPanel {
 		return jplPanel;
 	}
 
-	public static void main(String[] args) throws TembooException {
+	public static void main(String[] args) throws TembooException, IOException, URISyntaxException {
 		JFrame frame = new JFrame("TabbedPane Source Demo");
 		frame.addWindowListener(new WindowAdapter() {
 

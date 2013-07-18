@@ -1,4 +1,8 @@
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Scanner;
 
 import com.google.gson.JsonArray;
@@ -22,8 +26,8 @@ public class AutoLogTest1 {
 	private TembooSession session;
 	private FinalizeOAuthResultSet finalizeOAuthResults;
 	private String fbAccessToken;
-	
-	public AutoLogTest1() throws TembooException{
+	private String message;
+	public AutoLogTest1() throws TembooException, IOException, URISyntaxException{
 		
 		String callbackID;
 		String fbAccessToken;
@@ -45,9 +49,15 @@ public class AutoLogTest1 {
 			
 		// Send user to website to authorize and get code for finalize step
 		//JOptionPane.showInputDialog(null, "go to the following link \n" + initializeOAuthResults);
-		System.out.println("Visit the following website and click Allow, pressing enter here after you have done so.\n" + initializeOAuthResults.get_AuthorizationURL());
-		callbackID = in.nextLine().trim();
+		//System.out.println("Visit the following website and click Allow, pressing enter here after you have done so.\n" + initializeOAuthResults.get_AuthorizationURL());
+		//callbackID = in.nextLine().trim();
 		callbackID = initializeOAuthResults.get_CallbackID().trim();
+		
+		
+		
+		System.out.println("Opening URL");
+
+		this.openBrowser(initializeOAuthResults.get_AuthorizationURL());
 		
 		FinalizeOAuth finalizeOAuthChoreo = new FinalizeOAuth(session);
 		FinalizeOAuthInputSet finalizeOAuthInputs = finalizeOAuthChoreo.newInputSet();
@@ -82,12 +92,18 @@ public class AutoLogTest1 {
 		    	for(int i = 0; i < feed.size(); i++) {
 		    		String name = feed.get(i).getAsJsonObject().get("from").getAsJsonObject().get("name").getAsString();
 		   			JsonElement msg = feed.get(i).getAsJsonObject().get("message");
-		   			String message = "a custom post such as a video or picture";
+		   			//String message = "Something was shared, I can't do stuff about it";
 		   			String pict = "";
+		   			if(msg==null){
+		   				
+		   				name = "";
+		   			}
 		   			JsonElement pic = feed.get(i).getAsJsonObject().get("picture");
 		   			if(msg != null) {
 		   				message = msg.getAsString();
 		   			}
+		   			else
+		   				message = "";
 		   			if(pic != null){
 		   				pict = pic.getAsString();
 		   				f += name + "\n" + message + "\n" + pict + "\n\n";
@@ -99,5 +115,14 @@ public class AutoLogTest1 {
 		    	}
 		
 		return f;
+	}
+	public void openBrowser(String myUrl){
+		try {
+			Desktop desktop = java.awt.Desktop.getDesktop();
+			URI oURL = new URI(myUrl);
+			desktop.browse(oURL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
