@@ -11,11 +11,12 @@ import java.awt.event.*;
 
 public class JTabbedPaneDemo extends JPanel {
 
+	JTextArea textArea;
 	public JTabbedPaneDemo() {
 		ImageIcon icon = new ImageIcon("java-swing-tutorial.JPG");
 		JTabbedPane jtbExample = new JTabbedPane();
 		
-		JPanel jplInnerPanel1 = createInnerPanel("Facebook");
+		JPanel jplInnerPanel1 = createInnerPanel(new Tweet().check());
 		jtbExample.addTab("Facebook", icon, jplInnerPanel1, "Tab 1");
 		jtbExample.setSelectedIndex(0);
 		JPanel p = new JPanel();
@@ -27,6 +28,8 @@ public class JTabbedPaneDemo extends JPanel {
 		jtbExample.addTab("News", icon, jplInnerPanel3, "Tab 3");
 		setLayout(new GridLayout(1, 1));
 		add(jtbExample);
+
+		//jtbExample.add(new JLabel("Hi"));
 	//Specify different JLABEL to each
 	
 	}
@@ -37,10 +40,10 @@ public class JTabbedPaneDemo extends JPanel {
 		JPanel jplPanel = new JPanel();
 //		JLabel jlbDisplay = new JLabel(text);
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 
 		// add text to it; we want to make it scroll
-		textArea.setText(text + "\nxx\nxx\nxx\nxx\nxx\nxx\nxx\nxx\nxx\nxx\nxx\nxx\nxx\nxx\nxx\nxx\n");
+		textArea.setText(text);
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		
 		jplPanel.setLayout(new GridLayout(1, 1));
