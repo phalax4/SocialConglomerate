@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import twitter4j.TwitterException;
 
@@ -15,13 +17,17 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
+
 import javax.swing.UIManager.*;
+import javax.swing.plaf.ColorUIResource;
 public class JTabbedPaneDemo extends JPanel  implements ActionListener {
-	JButton b1;ImageIcon icon;
+	JButton b1;ImageIcon icon,icon1,icon2,icon3,icon5;
+	
 	JTabbedPane jtbExample;
-	AutoLogTest1 bob  = new AutoLogTest1();
+	
+/*	AutoLogTest1 bob  = new AutoLogTest1();
 	Tweet1 dave = new Tweet1();
-	NYTRunner1 sally = new NYTRunner1();
+	NYTRunner1 sally = new NYTRunner1();*/
 
 
 	String text1,text2,text3;
@@ -29,27 +35,31 @@ public class JTabbedPaneDemo extends JPanel  implements ActionListener {
 	JTextArea textArea;
 	public JTabbedPaneDemo() throws TembooException, IOException, URISyntaxException, TwitterException {
 		b1 = new JButton("Refresh");
-		icon = new ImageIcon("java-swing-tutorial.JPG");
+		icon5 = new ImageIcon(this.getClass().getResource("f.png"));
+		icon1 = new ImageIcon(this.getClass().getResource("t.png"));
+		icon2 = new ImageIcon(this.getClass().getResource("n.png"));
+
 
 		jtbExample = new JTabbedPane();
 
-		jplInnerPanel1 = createInnerPanel(bob.refresh());
+	/*	jplInnerPanel1 = createInnerPanel(bob.refresh());
 		jplInnerPanel2 = createInnerPanel(dave.check());
-		jplInnerPanel3 = createInnerPanel(sally.refresh());
+		jplInnerPanel3 = createInnerPanel(sally.refresh());*/
 
-		//jplInnerPanel1 = createInnerPanel("Facebook");
-		// jplInnerPanel2 = createInnerPanel("Twitter");
-		//jplInnerPanel3 = createInnerPanel("Nytimes");
+		jplInnerPanel1 = createInnerPanel("Facebook");
+		 jplInnerPanel2 = createInnerPanel("Twitter");
+		jplInnerPanel3 = createInnerPanel("Nytimes");
 
 
 
 		jplInnerPanel4 = createInnerPanel("");
 
-		jtbExample.addTab("Facebook", icon, jplInnerPanel1);
-		jtbExample.addTab("Twitter", icon, jplInnerPanel2);
-		jtbExample.addTab("News", icon, jplInnerPanel3);
+		jtbExample.addTab("Facebook", icon5, jplInnerPanel1);
+		
+		jtbExample.addTab("Twitter", icon1, jplInnerPanel2);
+		jtbExample.addTab("News", icon2, jplInnerPanel3);
 		setLayout(new GridLayout(1, 1));
-		jtbExample.addTab("", icon, jplInnerPanel4);
+		jtbExample.addTab("", icon3, jplInnerPanel4);
 		setLayout(new GridLayout(1, 1));
 		jtbExample.setTabComponentAt(3,b1);
 		b1.setActionCommand("fresh");
@@ -81,8 +91,24 @@ public class JTabbedPaneDemo extends JPanel  implements ActionListener {
 			jtbExample.remove(0);
 			jtbExample.remove(0);
 			jtbExample.remove(0);
+			
+			jplInnerPanel1 = createInnerPanel("F");
+			jtbExample.addTab("Facebook", icon, jplInnerPanel1);
 
-			try {
+			jplInnerPanel2 = createInnerPanel("T");
+			jtbExample.addTab("Twitter", icon, jplInnerPanel2);
+
+			jplInnerPanel3 = createInnerPanel("S");
+			jtbExample.addTab("news", icon, jplInnerPanel3);
+			
+			jtbExample.remove(0);
+			jplInnerPanel4 = createInnerPanel("");
+			jtbExample.addTab("", icon, jplInnerPanel4);
+			jtbExample.setTabComponentAt(3,b1);
+			b1.setActionCommand("fresh");
+			b1.addActionListener(this);
+			
+			/*try {
 				jplInnerPanel1 = createInnerPanel(bob.refresh());
 				jtbExample.addTab("Facebook", icon, jplInnerPanel1);
 				
@@ -104,19 +130,26 @@ public class JTabbedPaneDemo extends JPanel  implements ActionListener {
 			} catch (TembooException | TwitterException | IOException | URISyntaxException e1) {
 				e1.printStackTrace();
 
-			}
+			}*/
 
 
 		}
 	}
-	public static void main(String[] args) throws TembooException, IOException, URISyntaxException, TwitterException {
-		JFrame frame = new JFrame("TabbedPane Source Demo");
-		frame.addWindowListener(new WindowAdapter() {
-
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
+	public static void main(String[] args) throws TembooException, IOException, URISyntaxException, TwitterException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+		Color mycolor = new Color(127,233,255);
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            UIManager.getLookAndFeelDefaults().put("Panel.background", Color.BLACK);
+		           
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		}
+		JFrame frame = new JFrame("TLdr");
 		
 		frame.getContentPane().add(new JTabbedPaneDemo(), BorderLayout.CENTER);
 		frame.setSize(600, 600);
@@ -124,5 +157,8 @@ public class JTabbedPaneDemo extends JPanel  implements ActionListener {
 	}
 
 }
+
+
+
 
 
