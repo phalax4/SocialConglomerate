@@ -95,8 +95,9 @@ public class AutoLogTest1 {
 		   			//String message = "Something was shared, I can't do stuff about it";
 		   			String pict = "";
 		   			if(msg==null){
+		   				continue;
+		   				//name = "";
 		   				
-		   				name = "";
 		   			}
 		   			JsonElement pic = feed.get(i).getAsJsonObject().get("picture");
 		   			if(msg != null) {
