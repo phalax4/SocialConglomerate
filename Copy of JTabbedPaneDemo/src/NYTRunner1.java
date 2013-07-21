@@ -11,7 +11,7 @@ public class NYTRunner1 {
 	 * @param args
 	 * @throws TembooException 
 	 */
-	String thread;FeedPull asdf = new FeedPull("1e189707ebda2e84b55d989021b0fb0b:8:67890430");
+	String thread;FeedPull1 asdf = new FeedPull1("1e189707ebda2e84b55d989021b0fb0b:8:67890430");
 	public NYTRunner1() throws TembooException {
 		
 		

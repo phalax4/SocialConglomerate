@@ -3,6 +3,7 @@
 
 //Original code at http://www.java-tutorial.ch/framework/twitter-with-java-tutorial
 import java.awt.Desktop;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -16,7 +17,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -38,14 +40,11 @@ import com.temboo.Library.Twitter.Tweets.StatusesUpdate.StatusesUpdateResultSet;
 import com.temboo.core.TembooException;
 import com.temboo.core.TembooSession;
 
-
-
 public class Tweet1 {
 	
 	public Tweet1()throws TembooException{
 	}
-	Properties prop;
-
+	Properties prop;String pin;
 	String token; String tokenSecret;long name;
     String line; Gson gson = new Gson();String au;
     int var1,var2,var3,var4;
@@ -78,24 +77,13 @@ public class Tweet1 {
 		RequestToken requestToken = twitter.getOAuthRequestToken();
 		System.out.println("Going to "+ requestToken.getAuthorizationURL());
 		String web = requestToken.getAuthorizationURL();
-
 		this.openBrowser(web);
-		//Desktop.getDesktop().browse(new URI(web));
-
 		AccessToken accessToken = null;
-		Scanner reader = new Scanner(System.in);
-
-
-		//BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
+		
 		while (null == accessToken) {
 			try {
-
-				System.out.println("Input pin: ");
-				String pin = reader.nextLine();
 				
-				//System.out.print("Input PIN here: ");
-				//String pin = br.readLine();
+				pin = JOptionPane.showInputDialog (null,"Input Pin: ");  
 
 				accessToken = twitter.getOAuthAccessToken(requestToken, pin);
 
@@ -185,24 +173,10 @@ public class Tweet1 {
 		//new Reader().parse(result);
 
     	return thread;
-	//new Listen().listen(CONSUMER_KEY, CONSUMER_KEY_SECRET,token,tokenSecret);
 	}
 
 	public void storeAccessToken() throws IOException{
-		//store as json file//expiring token?
-		/*try {
-    	
-    		prop.setProperty("debug", "true");
-    		prop.setProperty("oauth.consumerKey", CONSUMER_KEY);
-    		prop.setProperty("oauth.consumerSecret", CONSUMER_KEY_SECRET);
-    		prop.setProperty("oauth.accessToken", token);
-    		prop.setProperty("oauth.accessTokenSecret", "tokenSecret");
-    	
-    		prop.store(new FileOutputStream("twitter4j.properties"), null);
- 
-    	} catch (IOException ex) {
-    		ex.printStackTrace();
-        }*/
+
 		output = new BufferedWriter(new FileWriter(file));
 		output.write("true"+"\r\n");
 		output.write(name+"\r\n");
@@ -225,23 +199,6 @@ public class Tweet1 {
 	
 	public String getCreds(){
 
-	/*	try {
-           
-			InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("twitter4j.properties");
- 		prop.load(new FileInputStream("twitter4j.properties"));
-
-           
-        list.add(prop.getProperty("oauth.accessToken"));
- 		list.add(prop.getProperty("oauth.accessTokenSecret"));
- 		//System.out.println(prop.getProperty("dbpassword"));
-
- 	} catch (IOException ex) {
- 		ex.printStackTrace();
-     }*/
-
-		
-		
-
 		try{
 			FileInputStream fstream = new FileInputStream("db.txt");
 			DataInputStream in = new DataInputStream(fstream);
@@ -257,6 +214,6 @@ public class Tweet1 {
 			return null;
 		}
 	}
-	//User user = twitter.showUser(screenName);
+	
 
 }

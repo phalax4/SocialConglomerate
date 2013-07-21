@@ -15,7 +15,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
-
+import javax.swing.UIManager.*;
 public class JTabbedPaneDemo extends JPanel  implements ActionListener {
 	JButton b1;ImageIcon icon;
 	JTabbedPane jtbExample;
@@ -46,7 +46,6 @@ public class JTabbedPaneDemo extends JPanel  implements ActionListener {
 		jplInnerPanel4 = createInnerPanel("");
 
 		jtbExample.addTab("Facebook", icon, jplInnerPanel1);
-		//jtbExample.setSelectedIndex(0);
 		jtbExample.addTab("Twitter", icon, jplInnerPanel2);
 		jtbExample.addTab("News", icon, jplInnerPanel3);
 		setLayout(new GridLayout(1, 1));

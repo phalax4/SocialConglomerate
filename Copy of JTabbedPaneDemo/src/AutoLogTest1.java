@@ -33,24 +33,19 @@ public class AutoLogTest1 {
 		String fbAccessToken;
 		Scanner in = new Scanner(System.in);
 		
-		// Instantiate the Choreo, using a previously instantiated TembooSession object, eg:
 		session = new TembooSession("jayos", "myFirstApp", "d23787cb-8d8f-4c83-a");
 		InitializeOAuth initializeOAuthChoreo = new InitializeOAuth(session);
 		
-		// Get an InputSet object for the choreo
 		InitializeOAuthInputSet initializeOAuthInputs = initializeOAuthChoreo.newInputSet();
 		
-		// Set inputs
+
 		initializeOAuthInputs.set_AppID("395494320570728");
 		initializeOAuthInputs.set_Scope("read_stream");
 
-		// Execute Choreo
+
 		InitializeOAuthResultSet initializeOAuthResults = initializeOAuthChoreo.execute(initializeOAuthInputs);
 			
-		// Send user to website to authorize and get code for finalize step
-		//JOptionPane.showInputDialog(null, "go to the following link \n" + initializeOAuthResults);
-		//System.out.println("Visit the following website and click Allow, pressing enter here after you have done so.\n" + initializeOAuthResults.get_AuthorizationURL());
-		//callbackID = in.nextLine().trim();
+
 		callbackID = initializeOAuthResults.get_CallbackID().trim();
 		
 		
@@ -73,38 +68,30 @@ public class AutoLogTest1 {
 	{
 		String f = "";
 		
-		//receives raw feed	
 				NewsFeed newsFeedChoreo = new NewsFeed(session);
 				NewsFeedInputSet newsFeedInputs = newsFeedChoreo.newInputSet();
 				fbAccessToken = finalizeOAuthResults.get_AccessToken();
 				newsFeedInputs.set_AccessToken(fbAccessToken);
 				NewsFeedResultSet newsFeedResults = newsFeedChoreo.execute(newsFeedInputs);
 				String json = newsFeedResults.get_Response();
-				//System.out.println(json);
-				
-				// Parse the json with gson
+
 		    	JsonParser jp = new JsonParser();
 		    	JsonElement root = jp.parse(json);
-		    	JsonObject rootobj = root.getAsJsonObject(); // may be Json Array if it's an array, or other type if a primitive
+		    	JsonObject rootobj = root.getAsJsonObject(); 
 		    	
 		    	JsonArray feed = rootobj.get("data").getAsJsonArray();
 		    	
 		    	for(int i = 0; i < feed.size(); i++) {
 		    		String name = feed.get(i).getAsJsonObject().get("from").getAsJsonObject().get("name").getAsString();
 		   			JsonElement msg = feed.get(i).getAsJsonObject().get("message");
-		   			//String message = "Something was shared, I can't do stuff about it";
+
 		   			String pict = "";
 		   			if(msg==null){
 		   				continue;
-		   				//name = "";
 		   				
 		   			}
 		   			JsonElement pic = feed.get(i).getAsJsonObject().get("picture");
-		   			if(msg != null) {
-		   				message = msg.getAsString();
-		   			}
-		   			else
-		   				message = "";
+		   			
 		   			if(pic != null){
 		   				pict = pic.getAsString();
 		   				f += name + "\n" + message + "\n" + pict + "\n\n";
@@ -112,7 +99,7 @@ public class AutoLogTest1 {
 		   			else{
 		   				f += name + "\n" + message + "\n\n";
 		   			}
-		   			//JOptionPane.showMessageDialog(null, name + "\n" + message);
+		   			
 		    	}
 		
 		return f;
