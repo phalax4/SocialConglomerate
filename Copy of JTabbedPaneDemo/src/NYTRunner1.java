@@ -11,18 +11,19 @@ public class NYTRunner1 {
 	 * @param args
 	 * @throws TembooException 
 	 */
-	String thread;
+	String thread;FeedPull asdf = new FeedPull("1e189707ebda2e84b55d989021b0fb0b:8:67890430");
 	public NYTRunner1() throws TembooException {
 		
-		FeedPull asdf = new FeedPull("1e189707ebda2e84b55d989021b0fb0b:8:67890430");
 		
-		thread = asdf.pullFeed();
+		
+		
 		
 		
 	}
 	
-	public String refresh()
+	public String refresh() throws TembooException
 	{
+		thread = asdf.pullFeed();
 		JsonParser jp = new JsonParser();
 		JsonElement root = jp.parse(thread);
     	JsonObject rootobj = root.getAsJsonObject(); // may be Json Array if it's an array, or other type if a primitive
