@@ -94,10 +94,10 @@ public class AutoLogTest1 {
 		   			
 		   			if(pic != null){
 		   				pict = pic.getAsString();
-		   				f += name + "\n" + message + "\n" + pict + "\n\n";
+		   				f += name + "\n" + msg+ "\n" + pict + "\n\n";
 		   			}
 		   			else{
-		   				f += name + "\n" + message + "\n\n";
+		   				f += name + "\n" + msg + "\n\n";
 		   			}
 		   			
 		    	}
