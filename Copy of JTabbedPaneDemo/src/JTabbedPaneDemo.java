@@ -54,7 +54,7 @@ public class JTabbedPaneDemo extends JPanel  implements ActionListener {
 		
 		
 		demo();
-		//getW();
+		getW();
 	}
 	public void demo() throws TembooException, IOException, URISyntaxException, TwitterException {
 		jtbExample = new JTabbedPane();
