@@ -113,24 +113,4 @@ public class AutoLogTest1 {
 			e.printStackTrace();
 		}
 	}
-public void postit() throws TembooException{
-		
-		String status = JOptionPane.showInputDialog("Enter your facebook status: ");
-					
-		fbAccessToken = finalizeOAuthResults.get_AccessToken();
-		SetStatus setStatusChoreo = new SetStatus(session);
-
-		// Get an InputSet object for the choreo
-		SetStatusInputSet setStatusInputs = setStatusChoreo.newInputSet();
-
-		// Set inputs
-		setStatusInputs.set_AccessToken(fbAccessToken);
-		//String status = JOptionPane.showInputDialog("Enter your facebook status: ");
-		setStatusInputs.set_Message(status);
-
-		// I know there's an error, just leave it
-		// It needs the line below to work
-		SetStatusResultSet setStatusResults = setStatusChoreo.execute(setStatusInputs);
-		}
-
 }
