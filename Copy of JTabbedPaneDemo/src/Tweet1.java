@@ -3,7 +3,6 @@
 
 //Original code at http://www.java-tutorial.ch/framework/twitter-with-java-tutorial
 import java.awt.Desktop;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -41,13 +40,11 @@ import com.temboo.core.TembooException;
 import com.temboo.core.TembooSession;
 
 public class Tweet1 {
-	
-	public Tweet1()throws TembooException{
-	}
+	String sub;
 	Properties prop;String pin;
 	String token; String tokenSecret;long name;
     String line; Gson gson = new Gson();String au;
-    int var1,var2,var3,var4;
+    int var1,var2,var3,var4;String msg;
     private final static String CONSUMER_KEY = "hyL303lpgZpSt6cMmilBw";
 	private final static String CONSUMER_KEY_SECRET = "EqgkdjEPuhP4KyVm3PEV926YuDrPcZAG249FxwXE9Q";
 	private final static String APP_KEY_NAME = "myFirstApp";
@@ -58,6 +55,11 @@ public class Tweet1 {
 	ArrayList<String> stringList = new ArrayList<String>();
 	String getter;
 	
+	/*public String runPost(String message) throws TembooException{
+		
+		msg = message;
+		return post(msg,list);
+	}*/
 	public String check() throws TwitterException, IOException, URISyntaxException, TembooException{
 		if(getCreds()==null){
 			start();
@@ -109,20 +111,21 @@ public class Tweet1 {
 
 
 
-	public void post() throws TembooException{
+	public String post(String text) throws TembooException{
 
 		TembooSession session = new TembooSession("phalax4", APP_KEY_NAME, APP_KEY_VALUE);
 		StatusesUpdate statusesUpdateChoreo = new StatusesUpdate(session);
 		StatusesUpdateInputSet statusesUpdateInputs = statusesUpdateChoreo.newInputSet();
 
-		statusesUpdateInputs.set_AccessToken(token);
-		statusesUpdateInputs.set_AccessTokenSecret(tokenSecret);
+		statusesUpdateInputs.set_AccessToken(list.get(2));
+		statusesUpdateInputs.set_AccessTokenSecret(list.get(3));
 		statusesUpdateInputs.set_ConsumerSecret(CONSUMER_KEY_SECRET);
-		statusesUpdateInputs.set_StatusUpdate("Temboo2");
 		statusesUpdateInputs.set_ConsumerKey(CONSUMER_KEY);
+		statusesUpdateInputs.set_StatusUpdate(text);
 
 		StatusesUpdateResultSet statusesUpdateResults = statusesUpdateChoreo.execute(statusesUpdateInputs);
-		System.out.println("Tweet Posted");
+		//System.out.println("Tweet Posted");
+		return ("Posted!");
 	}
 	
 	public String refresh(ArrayList<String> list1) throws TembooException, IOException, TwitterException{
@@ -138,7 +141,7 @@ public class Tweet1 {
 
 		HomeTimelineResultSet homeTimelineResults = homeTimelineChoreo.execute(homeTimelineInputs);
 		
-		//System.out.println(homeTimelineResults.get_Response());
+		System.out.println(homeTimelineResults.get_Response());
 
 		
 		 /*JsonElement jelement = new JsonParser().parse(homeTimelineResults.get_Response());
@@ -153,6 +156,7 @@ public class Tweet1 {
 		
     	//JsonArray statuses = rootobj.get("statuses").getAsJsonArray();
     	String thread = "";
+    	
     	for(int i = 0; i < statuses.size(); i++) {
     		JsonObject status = statuses.get(i).getAsJsonObject();
     		
@@ -162,13 +166,24 @@ public class Tweet1 {
     		JsonArray urls = status.get("entities").getAsJsonObject().get("urls").getAsJsonArray();
     		
     		au = urls.toString();
+    		
     		var1 = au.indexOf(":")+1;
     		var2 = au.indexOf(":",var1)+1;
     		var3 = au.indexOf(":",var2)+2;
     		var4 = au.indexOf(",",var3)-1;
-    	
     		
-    		thread += screen_name + "\n" + text+"\n"+au.substring(var3,var4) +"\n\n";
+    		if(au.charAt(var1)== ' '){
+    			sub = " ";
+    		}else if (!(var3 < 0 || var4 < 0)){
+    			sub = au.substring(var3,var4);
+    		}
+    		else
+    		{
+    			sub = "";
+    		}
+    		
+    		
+    		thread += screen_name + "\n" + text+"\n"+sub +"\n\n";
     	}
 		//new Reader().parse(result);
 
@@ -207,8 +222,8 @@ public class Tweet1 {
 			while ((line = br.readLine()) != null)   {
 				list.add(line);
 			}			
-			in.close();
-			return "SUCCESS";
+			
+			return "Yay";
 		}catch (Exception e){
 			System.err.println("Error: " + e.getMessage());
 			return null;
