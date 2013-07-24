@@ -1,7 +1,5 @@
 
 
-
-//Original code at http://www.java-tutorial.ch/framework/twitter-with-java-tutorial
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -41,7 +39,7 @@ import com.temboo.core.TembooSession;
 
 public class Tweet1 {
 	String sub;
-	Properties prop;String pin;
+	String pin;
 	String token; String tokenSecret;long name;
     String line; Gson gson = new Gson();String au;
     int var1,var2,var3,var4;String msg;
@@ -66,12 +64,10 @@ public class Tweet1 {
 		}else{
 			return refresh(list);
 		}
-		return null;
-		
+		return null;	
 	}
-	public void start() throws TwitterException, IOException,URISyntaxException {
+	public void start() throws TwitterException, IOException,URISyntaxException, TembooException {
 
-		 prop = new Properties();
 		 
 
 		file = new File("db.txt");
@@ -98,14 +94,15 @@ public class Tweet1 {
 			}
 
 		}
-		System.out.println(accessToken.getToken());
-		System.out.println(accessToken.getTokenSecret());
-		System.out.println("Id is: "+ twitter.getId());
+		//System.out.println(accessToken.getToken());
+		//System.out.println(accessToken.getTokenSecret());
+		//System.out.println("Id is: "+ twitter.getId());
 		token = accessToken.getToken();
 		tokenSecret = accessToken.getTokenSecret();
 		name = twitter.getId();
 		this.storeAccessToken();
-		
+		getCreds();
+		refresh(list);
 		
 	}
 
@@ -117,8 +114,8 @@ public class Tweet1 {
 		StatusesUpdate statusesUpdateChoreo = new StatusesUpdate(session);
 		StatusesUpdateInputSet statusesUpdateInputs = statusesUpdateChoreo.newInputSet();
 
-		statusesUpdateInputs.set_AccessToken(list.get(2));
-		statusesUpdateInputs.set_AccessTokenSecret(list.get(3));
+		statusesUpdateInputs.set_AccessToken(list.get(0));
+		statusesUpdateInputs.set_AccessTokenSecret(list.get(1));
 		statusesUpdateInputs.set_ConsumerSecret(CONSUMER_KEY_SECRET);
 		statusesUpdateInputs.set_ConsumerKey(CONSUMER_KEY);
 		statusesUpdateInputs.set_StatusUpdate(text);
@@ -129,19 +126,20 @@ public class Tweet1 {
 	}
 	
 	public String refresh(ArrayList<String> list1) throws TembooException, IOException, TwitterException{
+		getCreds();
 		TembooSession session = new TembooSession("phalax4", APP_KEY_NAME, APP_KEY_VALUE);
 		
 		HomeTimeline homeTimelineChoreo = new HomeTimeline(session);
 		HomeTimelineInputSet homeTimelineInputs = homeTimelineChoreo.newInputSet();
 
-		homeTimelineInputs.set_AccessToken(list1.get(2));
-		homeTimelineInputs.set_AccessTokenSecret(list1.get(3));
+		homeTimelineInputs.set_AccessToken(list1.get(0));
+		homeTimelineInputs.set_AccessTokenSecret(list1.get(1));
 		homeTimelineInputs.set_ConsumerSecret(CONSUMER_KEY_SECRET);
 		homeTimelineInputs.set_ConsumerKey(CONSUMER_KEY);
 
 		HomeTimelineResultSet homeTimelineResults = homeTimelineChoreo.execute(homeTimelineInputs);
 		
-		System.out.println(homeTimelineResults.get_Response());
+		//System.out.println(homeTimelineResults.get_Response());
 
 		
 		 /*JsonElement jelement = new JsonParser().parse(homeTimelineResults.get_Response());
@@ -191,16 +189,11 @@ public class Tweet1 {
 	}
 
 	public void storeAccessToken() throws IOException{
-
 		output = new BufferedWriter(new FileWriter(file));
-		output.write("true"+"\r\n");
-		output.write(name+"\r\n");
 		output.write(token+"\r\n");
 		output.write(tokenSecret+"\r\n");
-
-
 		output.close();
-		System.out.println("Tokens Saved");
+		//System.out.println("Tokens Saved");
 	}
 	public void openBrowser(String myUrl){
 		try {
