@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -16,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -35,7 +37,12 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import twitter4j.TwitterException;
+
+import com.sun.syndication.io.FeedException;
 import com.temboo.core.TembooException;
+
+
 //timer for refresh?
 //weather
 //onion and CNN
@@ -44,17 +51,21 @@ import com.temboo.core.TembooException;
 //encrpyted chat?
 //matrik screen
 public class PasswordDialog implements ActionListener{
-	  JButton reset,register;JFrame guiFrame;Icon icon,icon1,icon2;
+	  JButton confirm,register;JFrame guiFrame;Icon icon,icon1,icon2;
 	  char[]user; char[] correctPassword;
 	  File file;Writer output = null;String line;
 	  ArrayList<String> list = new ArrayList<String>();
 	  JTextArea tracker;
 	  String inputUser,inputPass;
+	  JTextField username = new JTextField();
+      JPasswordField passwordFld = new JPasswordField();
+      JFrame tempframe;
 	  
-    public PasswordDialog (){
+    public PasswordDialog (JFrame frame){
 		icon = new ImageIcon(this.getClass().getResource("fire.png"));
-		//icon1 = new ImageIcon(this.getClass().getResource("w.png"));
+		icon1 = new ImageIcon(this.getClass().getResource("info.png"));
 		icon2 = new ImageIcon(this.getClass().getResource("check.png"));
+		tempframe = frame;
 
     }
    /* public void check() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
@@ -76,7 +87,7 @@ public class PasswordDialog implements ActionListener{
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 		        if ("Nimbus".equals(info.getName())) {
 		            UIManager.setLookAndFeel(info.getClassName());
-		           // UIManager.getLookAndFeelDefaults().put("Panel.background", Color.WHITE);
+		           // UIManager.getLookAndFeelDefaults().put("Panel.background", Color.);
 		           
 		            break;
 		        }
@@ -102,7 +113,8 @@ public class PasswordDialog implements ActionListener{
         
         
         JPanel userPanel = new JPanel();
-     
+        JLabel dis = new JLabel("MULTI-SOCIAL\n",JLabel.CENTER);
+        JLabel space = new JLabel();
         userPanel.setLayout(new GridLayout(7,1));
        // userPanel.setLayout(GridLayout(3,3);
         
@@ -117,74 +129,49 @@ public class PasswordDialog implements ActionListener{
         passwordLbl.setFont(new Font("Gothic", Font.BOLD,14));
         passwordLbl.setForeground(Color.BLACK);
         
-        JTextField username = new JTextField();
-        JPasswordField passwordFld = new JPasswordField();
-        reset = new JButton("Help");
+       // JTextField username = new JTextField();
+        //JPasswordField passwordFld = new JPasswordField();
+        confirm = new JButton("Confirm");
         register = new JButton("Register");
-        
-       
+        //dis.setHorizontalTextPosition(JLabel.CENTER);
+       dis.setFont(new Font("BankGothic Lt Bt", Font.BOLD, 21));
+
+        userPanel.add(dis);
+       // userPanel.add(space);
         userPanel.add(usernameLbl);
         userPanel.add(username);
         
         userPanel.add(passwordLbl);
         userPanel.add(passwordFld);
-        reset.addActionListener(this);
+        confirm.addActionListener(this);
         register.addActionListener(this);
-        userPanel.add(reset);
+        userPanel.add(confirm);
         userPanel.add(register);
         
-        Object[] options = {"Register","Help","Cancel"};
-int n = JOptionPane.showOptionDialog(userPanel,"Please fill out","Register",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[2]);
+        Object[] options = {"Help","Configure","Cancel"};
+        int input = JOptionPane.showOptionDialog(guiFrame, userPanel, "Security",
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options, null);        
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         
         //int input = JOptionPane.showConfirmDialog(guiFrame, userPanel, "Enter your password:",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.NO_OPTION,icon);
         
         
         
-        if (input == 0) {
-            //tracker.append("\nUsername entered was: " + username.getText());
-        	getUser();
-        	user = list.get(0).toCharArray();
-        	correctPassword = list.get(1).toCharArray();
-           
-            char[] entereduser = username.getText().toCharArray();
-            char[] enteredPassword = passwordFld.getPassword();
-           // tracker.append("\nPassword entered was: " + String.valueOf(enteredPassword));
-            
-            
-            if ((Arrays.equals(correctPassword, enteredPassword))&&(Arrays.equals(user, entereduser)) ){
-  
-            	guiFrame.dispose();
-                return "true";
-            }
-            else{
-                tracker.append("\nPassword or Username is incorrect"); 
-                tracker.append("\nPlease try again. Press Help for help.");
-                
-            }
-
-            Arrays.fill(enteredPassword, '0');
+        if (input == JOptionPane.YES_OPTION) {
+        	File file = new File("db.txt");
+			File file1 = new File("dc.txt");
+			File file2 = new File("dp.txt");
+			file.delete();
+			file1.delete();
+			file2.delete();
+			JOptionPane.showMessageDialog(guiFrame,"\nFatal Error, Please attempt to log in AGAIN."+"\nThank You.","Reset",JOptionPane.WARNING_MESSAGE,icon2);
+			createGuiFrame();
         }
-        else if(input==1){
-        	
+        else if(input ==JOptionPane.NO_OPTION){
+			JOptionPane.showMessageDialog(guiFrame,"Feature Coming Soon","Configure",JOptionPane.INFORMATION_MESSAGE,icon1);
+
                         
         }else{
             tracker.append("\nSecurity Protocol cancelled...");
@@ -195,20 +182,68 @@ int n = JOptionPane.showOptionDialog(userPanel,"Please fill out","Register",JOpt
     }
 
 
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==reset){
-			File file = new File("db.txt");
-			File file1 = new File("dc.txt");
-			File file2 = new File("dp.txt");
-			file.delete();
-			file1.delete();
-			file2.delete();
-			JOptionPane.showMessageDialog(guiFrame,"Fatal Error, Please attempt to log in AGAIN."+"\nThank You.","Reset",JOptionPane.WARNING_MESSAGE,icon2);
+		if(e.getSource()==confirm){
+			
+			
+			try {
+				getUser();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+        	user = list.get(0).toCharArray();
+        	correctPassword = list.get(1).toCharArray();
+           
+            char[] entereduser = username.getText().toCharArray();
+            char[] enteredPassword = passwordFld.getPassword();
+            
+            
+            if ((Arrays.equals(correctPassword, enteredPassword))&&(Arrays.equals(user, entereduser)) ){
+  
+            	guiFrame.dispose();
+            	try {
+        		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+        		        if ("Nimbus".equals(info.getName())) {
+        		            UIManager.setLookAndFeel(info.getClassName());
+        		            UIManager.getLookAndFeelDefaults().put("Panel.background", Color.BLACK);
+        		           
+        		            break;
+        		        }
+        		    }
+        		} catch (Exception e1) {
+        			try {
+						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+					} catch (ClassNotFoundException | InstantiationException
+							| IllegalAccessException
+							| UnsupportedLookAndFeelException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+        		}
+            	
+            	try {
+					tempframe.getContentPane().add(new JTabbedPaneDemo(), BorderLayout.CENTER);
+				} catch (TembooException | IOException | URISyntaxException
+						| TwitterException | IllegalArgumentException | FeedException e1) {
+					e1.printStackTrace();
+				}
+        		tempframe.setSize(600, 600);
+        		tempframe.setVisible(true);
+            }
+            else{
+    			JOptionPane.showMessageDialog(guiFrame,"Please Enter a valid username and password","Incomplete",JOptionPane.INFORMATION_MESSAGE,icon1);
+
+               // tracker.append("\nPassword or Username is incorrect"); 
+               // tracker.append("\nPlease try again. Press Help for help.");
+                
+            }
+
+            Arrays.fill(enteredPassword, '0');
+			
 		}
-		if(e.getSource()=="No"){
-			System.out.println("Hi");
-		}
+		
 		
 		if(e.getSource()==register){
 			if(getCreds()==null){
@@ -234,14 +269,15 @@ int n = JOptionPane.showOptionDialog(userPanel,"Please fill out","Register",JOpt
 				    try {
 						storeAccessToken();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}  
 				
 			}else{
-				tracker.append("You are already registered. We Only support one user."
-						+ "\nPlease press help for more details.Then Press Register");
+				//tracker.append("You are already registered. We Only support one user."
+						//+ "\nPlease press help for more details.Then Press Register");
+    			JOptionPane.showMessageDialog(guiFrame,"You are already Registered.\nPress Help for help.\nThen Register again.","Incomplete",JOptionPane.INFORMATION_MESSAGE,icon1);
+
 			}
 		}
 
