@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
  
+
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
@@ -17,10 +18,8 @@ import org.jdom.Document;
 
 public class TheOnionFeed {
 	
-	public TheOnionFeed()
-	{
-		
-	}
+	public TheOnionFeed(){}
+	
 	
 	public String refresh() throws IOException, IllegalArgumentException, FeedException
 	{

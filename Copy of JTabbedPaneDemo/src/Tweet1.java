@@ -54,12 +54,9 @@ public class Tweet1 {
 	ArrayList<String> list = new ArrayList<String>();
 	ArrayList<String> stringList = new ArrayList<String>();
 	String getter;
+	TembooSession session;
 	
-	/*public String runPost(String message) throws TembooException{
-		
-		msg = message;
-		return post(msg,list);
-	}*/
+	
 	public String check() throws TwitterException, IOException, URISyntaxException, TembooException{
 		if(getCreds()==null){
 			start();
@@ -112,7 +109,7 @@ public class Tweet1 {
 
 	public String post(String text) throws TembooException{
 
-		TembooSession session = new TembooSession("phalax4", APP_KEY_NAME, APP_KEY_VALUE);
+		session = new TembooSession("phalax4", APP_KEY_NAME, APP_KEY_VALUE);
 		StatusesUpdate statusesUpdateChoreo = new StatusesUpdate(session);
 		StatusesUpdateInputSet statusesUpdateInputs = statusesUpdateChoreo.newInputSet();
 
@@ -129,7 +126,7 @@ public class Tweet1 {
 	
 	public String refresh(ArrayList<String> list1) throws TembooException, IOException, TwitterException{
 		getCreds();
-		TembooSession session = new TembooSession("phalax4", APP_KEY_NAME, APP_KEY_VALUE);
+		 session = new TembooSession("phalax4", APP_KEY_NAME, APP_KEY_VALUE);
 		
 		HomeTimeline homeTimelineChoreo = new HomeTimeline(session);
 		HomeTimelineInputSet homeTimelineInputs = homeTimelineChoreo.newInputSet();

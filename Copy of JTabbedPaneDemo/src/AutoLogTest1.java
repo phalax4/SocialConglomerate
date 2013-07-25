@@ -55,6 +55,7 @@ public class AutoLogTest1 {
 
 	}
 	
+	
 	public String check() throws TwitterException, IOException, URISyntaxException, TembooException{
 		if(getCreds()==null){
 			token();

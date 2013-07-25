@@ -5,7 +5,7 @@ import com.temboo.core.TembooException;
 import com.temboo.core.TembooSession;
 
 
-public class FeedPull1 {
+public class FeedPull1{
 	
 	private String API_Key;
 	
@@ -13,6 +13,7 @@ public class FeedPull1 {
 	{
 		API_Key = key;
 	}
+	
 	
 	public String pullFeed() throws TembooException
 	{
