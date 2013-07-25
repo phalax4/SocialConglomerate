@@ -1,9 +1,6 @@
 
 
-
-//Original code at http://www.java-tutorial.ch/framework/twitter-with-java-tutorial
 import java.awt.Desktop;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -41,13 +38,11 @@ import com.temboo.core.TembooException;
 import com.temboo.core.TembooSession;
 
 public class Tweet1 {
-	
-	public Tweet1()throws TembooException{
-	}
-	Properties prop;String pin;
+	String sub;
+	String pin;
 	String token; String tokenSecret;long name;
     String line; Gson gson = new Gson();String au;
-    int var1,var2,var3,var4;
+    int var1,var2,var3,var4;String msg;
     private final static String CONSUMER_KEY = "hyL303lpgZpSt6cMmilBw";
 	private final static String CONSUMER_KEY_SECRET = "EqgkdjEPuhP4KyVm3PEV926YuDrPcZAG249FxwXE9Q";
 	private final static String APP_KEY_NAME = "myFirstApp";
@@ -58,18 +53,21 @@ public class Tweet1 {
 	ArrayList<String> stringList = new ArrayList<String>();
 	String getter;
 	
+	/*public String runPost(String message) throws TembooException{
+		
+		msg = message;
+		return post(msg,list);
+	}*/
 	public String check() throws TwitterException, IOException, URISyntaxException, TembooException{
 		if(getCreds()==null){
 			start();
 		}else{
 			return refresh(list);
 		}
-		return null;
-		
+		return null;	
 	}
-	public void start() throws TwitterException, IOException,URISyntaxException {
+	public void start() throws TwitterException, IOException,URISyntaxException, TembooException {
 
-		 prop = new Properties();
 		 
 
 		file = new File("db.txt");
@@ -96,43 +94,46 @@ public class Tweet1 {
 			}
 
 		}
-		System.out.println(accessToken.getToken());
-		System.out.println(accessToken.getTokenSecret());
-		System.out.println("Id is: "+ twitter.getId());
+		//System.out.println(accessToken.getToken());
+		//System.out.println(accessToken.getTokenSecret());
+		//System.out.println("Id is: "+ twitter.getId());
 		token = accessToken.getToken();
 		tokenSecret = accessToken.getTokenSecret();
 		name = twitter.getId();
 		this.storeAccessToken();
-		
+		getCreds();
+		refresh(list);
 		
 	}
 
 
 
-	public void post() throws TembooException{
+	public String post(String text) throws TembooException{
 
 		TembooSession session = new TembooSession("phalax4", APP_KEY_NAME, APP_KEY_VALUE);
 		StatusesUpdate statusesUpdateChoreo = new StatusesUpdate(session);
 		StatusesUpdateInputSet statusesUpdateInputs = statusesUpdateChoreo.newInputSet();
 
-		statusesUpdateInputs.set_AccessToken(token);
-		statusesUpdateInputs.set_AccessTokenSecret(tokenSecret);
+		statusesUpdateInputs.set_AccessToken(list.get(0));
+		statusesUpdateInputs.set_AccessTokenSecret(list.get(1));
 		statusesUpdateInputs.set_ConsumerSecret(CONSUMER_KEY_SECRET);
-		statusesUpdateInputs.set_StatusUpdate("Temboo2");
 		statusesUpdateInputs.set_ConsumerKey(CONSUMER_KEY);
+		statusesUpdateInputs.set_StatusUpdate(text);
 
 		StatusesUpdateResultSet statusesUpdateResults = statusesUpdateChoreo.execute(statusesUpdateInputs);
-		System.out.println("Tweet Posted");
+		//System.out.println("Tweet Posted");
+		return ("Posted!");
 	}
 	
 	public String refresh(ArrayList<String> list1) throws TembooException, IOException, TwitterException{
+		getCreds();
 		TembooSession session = new TembooSession("phalax4", APP_KEY_NAME, APP_KEY_VALUE);
 		
 		HomeTimeline homeTimelineChoreo = new HomeTimeline(session);
 		HomeTimelineInputSet homeTimelineInputs = homeTimelineChoreo.newInputSet();
 
-		homeTimelineInputs.set_AccessToken(list1.get(2));
-		homeTimelineInputs.set_AccessTokenSecret(list1.get(3));
+		homeTimelineInputs.set_AccessToken(list1.get(0));
+		homeTimelineInputs.set_AccessTokenSecret(list1.get(1));
 		homeTimelineInputs.set_ConsumerSecret(CONSUMER_KEY_SECRET);
 		homeTimelineInputs.set_ConsumerKey(CONSUMER_KEY);
 
@@ -153,6 +154,7 @@ public class Tweet1 {
 		
     	//JsonArray statuses = rootobj.get("statuses").getAsJsonArray();
     	String thread = "";
+    	
     	for(int i = 0; i < statuses.size(); i++) {
     		JsonObject status = statuses.get(i).getAsJsonObject();
     		
@@ -162,13 +164,24 @@ public class Tweet1 {
     		JsonArray urls = status.get("entities").getAsJsonObject().get("urls").getAsJsonArray();
     		
     		au = urls.toString();
+    		
     		var1 = au.indexOf(":")+1;
     		var2 = au.indexOf(":",var1)+1;
     		var3 = au.indexOf(":",var2)+2;
     		var4 = au.indexOf(",",var3)-1;
-    	
     		
-    		thread += screen_name + "\n" + text+"\n"+au.substring(var3,var4) +"\n\n";
+    		if(au.charAt(var1)== ' '){
+    			sub = " ";
+    		}else if (!(var3 < 0 || var4 < 0)){
+    			sub = au.substring(var3,var4);
+    		}
+    		else
+    		{
+    			sub = "";
+    		}
+    		
+    		
+    		thread += screen_name + "\n" + text+"\n"+sub +"\n\n";
     	}
 		//new Reader().parse(result);
 
@@ -176,16 +189,11 @@ public class Tweet1 {
 	}
 
 	public void storeAccessToken() throws IOException{
-
 		output = new BufferedWriter(new FileWriter(file));
-		output.write("true"+"\r\n");
-		output.write(name+"\r\n");
 		output.write(token+"\r\n");
 		output.write(tokenSecret+"\r\n");
-
-
 		output.close();
-		System.out.println("Tokens Saved");
+		//System.out.println("Tokens Saved");
 	}
 	public void openBrowser(String myUrl){
 		try {
@@ -207,8 +215,8 @@ public class Tweet1 {
 			while ((line = br.readLine()) != null)   {
 				list.add(line);
 			}			
-			in.close();
-			return "SUCCESS";
+			
+			return "Yay";
 		}catch (Exception e){
 			System.err.println("Error: " + e.getMessage());
 			return null;
